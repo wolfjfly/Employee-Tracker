@@ -1,6 +1,6 @@
 const { prompt } = require('inquirer');
 const db = require('./db');
-const { console.table } = require('console.table');
+const console = require('console');
 
 startApp();
 
@@ -39,7 +39,6 @@ function startApp() {
                     name: 'Add Department',
                     value: 'add_department'
                 },
-                //add additional choices here
             ]
         }
     ]).then(res => {
@@ -94,6 +93,41 @@ function viewEmployees() {
 }
 
 function addEmployee() {
+    prompt([
+        {
+            type: 'input',
+            name: 'first_name',
+            message: "What is the employee's first name?",
+        },
+        {
+            type: 'input',
+            name: 'last_name',
+            message: "What is the employee's last name?",
+        },
+        {
+            type: 'input',
+            name: 'role_id',
+            message: "What is the reference ID for the employee's role?",
+        },
+        {
+            type: 'input',
+            name: 'manager_id',
+            message: "What is the reference ID for the employee's manager?",
+        },
+    ]).then((responses) => {
+        let answers = [responses.first_name, responses.last_name, responses.role_id, responses.manager_id];
+        const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`;
+        db.query(sql, answers, (err, result) => {
+            if (err) {
+              res.status(400).json(err);
+              return;
+            }
+            res.json({
+              message: 'success',
+            });
+          });
+    })
+    .then(() => startApp())
     
 }
 
@@ -102,7 +136,12 @@ function updateEmployeeRole() {
 }
 
 function viewRoles() {
-
+    db.findAllRoles()
+    .then(([rows]) => {
+        let roles = rows;
+        console.table(roles)
+    })
+    .then(() => startApp())
 }
 
 function addRole() {
@@ -110,7 +149,12 @@ function addRole() {
 }
 
 function viewDepartments() {
-
+    db.findAllRoles()
+    .then(([rows]) => {
+        let roles = rows;
+        console.table(roles)
+    })
+    .then(() => startApp())
 }
 
 function addDepartment() {
