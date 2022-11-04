@@ -1,5 +1,5 @@
 //const for connection
-const connection = require('./connection');
+const connection = require('./db/connection');
 
 //constructor class that holds executable functions for application
 
@@ -26,5 +26,6 @@ class DB {
         )
     }
 
-    //add other functions here
 } 
+
+module.exports = DB;
