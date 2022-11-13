@@ -112,7 +112,7 @@ function startApp() {
 
 
 function viewEmployees() {
-    db.findAllEmployees()
+    DB.findAllEmployees()
         .then(([rows]) => {
             let employees = rows;
             console.table(employees)
@@ -193,7 +193,7 @@ function updateEmployeeRole() {
 }
 
 function viewRoles() {
-    db.findAllRoles()
+    DB.findAllRoles()
         .then(([rows]) => {
             let roles = rows;
             console.table(roles)
@@ -235,7 +235,7 @@ function addRole() {
 }
 
 function viewDepartments() {
-    db.findAllRoles()
+    DB.findAllRoles()
         .then(([rows]) => {
             let roles = rows;
             console.table(roles)
