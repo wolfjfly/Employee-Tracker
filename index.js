@@ -28,4 +28,4 @@ class DB {
 
 } 
 
-module.exports = DB;
+module.exports = new DB(connection);

@@ -3,11 +3,6 @@ const db = require('./db/connection');
 const ctable = require('console.table');
 const connection = require('./db/connection');
 const DB = require('./index');
-// const express = require('express');
-// const app = express();
-
-// app.use(express.urlencoded({ extended: false }));
-// app.use(express.json());
 
 startApp();
 
