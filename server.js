@@ -4,9 +4,7 @@ const ctable = require('console.table');
 const connection = require('./db/connection');
 const DB = require('./index');
 
-startApp();
-
-function startApp() {
+function startApp(){
     prompt([
         {
             type: 'list',
@@ -93,12 +91,12 @@ function startApp() {
                 break;
         }
         switch (choice) {
-            case 'add_department':
+            case 'delete_employee':
                 deleteEmployee();
                 break;
         }
         switch (choice) {
-            case 'add_department':
+            case 'delete_role':
                 deleteRole();
                 break;
         }
@@ -108,7 +106,7 @@ function startApp() {
                 break;
         }
     })
-}
+};
 
 
 function viewEmployees() {
@@ -118,7 +116,7 @@ function viewEmployees() {
             console.table(employees)
         })
         .then(() => startApp())
-}
+};
 
 function addEmployee() {
     prompt([
@@ -157,7 +155,7 @@ function addEmployee() {
     })
         .then(() => startApp())
 
-}
+};
 
 function updateEmployeeRole() {
     prompt([
@@ -190,7 +188,7 @@ function updateEmployeeRole() {
         });
     })
         .then(() => startApp())
-}
+};
 
 function viewRoles() {
     DB.findAllRoles()
@@ -199,7 +197,7 @@ function viewRoles() {
             console.table(roles)
         })
         .then(() => startApp())
-}
+};
 
 function addRole() {
     prompt([
@@ -232,7 +230,7 @@ function addRole() {
         });
     })
         .then(() => startApp())
-}
+};
 
 function viewDepartments() {
     DB.findAllRoles()
@@ -241,7 +239,7 @@ function viewDepartments() {
             console.table(roles)
         })
         .then(() => startApp())
-}
+};
 
 function addDepartment() {
     prompt([
@@ -264,7 +262,7 @@ function addDepartment() {
         });
     })
         .then(() => startApp())
-}
+};
 
 function deleteEmployee() {
     prompt([
@@ -287,7 +285,7 @@ function deleteEmployee() {
         });
     })
         .then(() => startApp())
-}
+};
 
 function deleteRole() {
     prompt([
@@ -310,7 +308,7 @@ function deleteRole() {
         });
     })
         .then(() => startApp())
-}
+};
 
 function deleteDepartment() {
     prompt([
@@ -333,4 +331,6 @@ function deleteDepartment() {
         });
     })
         .then(() => startApp())
-}
+};
+
+startApp();
