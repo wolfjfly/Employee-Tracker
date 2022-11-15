@@ -16,14 +16,14 @@ class DB {
 
     findAllRoles () {
         return this.connection.promise().query(
-            `SELECT role.id AS "role id", role.title, role.salary, department.name FROM role LEFT JOIN department ON role.department_id = department_id`
-        )
+            `SELECT role.id AS "role id", role.title, role.salary, department.name FROM role LEFT JOIN department ON role.department_id`
+        );
     }
 
     findAllDepartments () {
         return this.connection.promise().query(
             `SELECT department.id AS "department id", department.name FROM department`
-        )
+        );
     }
 
 } 
