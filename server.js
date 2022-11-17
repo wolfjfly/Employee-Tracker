@@ -4,7 +4,7 @@ const ctable = require('console.table');
 const connection = require('./db/connection');
 const DB = require('./index');
 
-function startApp(){
+function startApp() {
     prompt([
         {
             type: 'list',
@@ -158,36 +158,43 @@ function addEmployee() {
 };
 
 function updateEmployeeRole() {
-    prompt([
-        {
-            type: 'input',
-            name: 'first_name',
-            message: "What is the employee's first name?",
-        },
-        {
-            type: 'input',
-            name: 'last_name',
-            message: "What is the employee's last name?",
-        },
-        {
-            type: 'input',
-            name: 'role_id',
-            message: "What is the reference ID for the employee's new role?",
-        },
-    ]).then((responses) => {
-        let answers = [responses.first_name, responses.last_name, responses.title];
-        const sql = `UPDATE employee SET role_id = ? WHERE (first_name, last_name) = (?,?)`;
-        db.query(sql, answers, (err, result) => {
-            if (err) {
-                res.status(400).json(err);
-                return;
-            }
-            res.json({
-                message: 'success',
-            });
-        });
-    })
-        .then(() => startApp())
+    DB.findAllEmployees()
+        .then(([rows]) => {
+            let employees = rows;
+            const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
+                name: `${first_name} ${last_name}`,
+                value: id
+            }))
+            prompt([
+                {
+                    type: 'list',
+                    name: 'employeeID',
+                    message: "Which employee's role do you want to update?",
+                    choices: employeeChoices
+                },
+            ]).then((res) => {
+                let employeeID = res.employeeID
+                DB.findAllRoles()
+                    .then(([rows]) => {
+                        let roles = rows;
+                        const roleChoices = roles.map(({ id, title }) => ({
+                            name: title,
+                            value: id,
+                        }))
+                        prompt([
+                            {
+                                type: 'list',
+                                name: 'roleID',
+                                message: "Which role do you want to assign this employee?",
+                                choices: roleChoices
+                            },
+                        ])
+                            .then(res => DB.updateEmployeeRole(employeeID, res.roleID))
+                            .then(() => console.log(`updated employee's role`))
+                            .then(() => startApp())
+                    })
+            })
+        })
 };
 
 function viewRoles() {
@@ -200,36 +207,38 @@ function viewRoles() {
 };
 
 function addRole() {
-    prompt([
-        {
-            type: 'input',
-            name: 'title',
-            message: "What is the title/name of the role?",
-        },
-        {
-            type: 'input',
-            name: 'salary',
-            message: "What is the salary of the role?",
-        },
-        {
-            type: 'input',
-            name: 'department_id',
-            message: "What is the reference ID for the role's department?",
-        },
-    ]).then((responses) => {
-        let answers = [responses.title, responses.salary, department_id];
-        const sql = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`;
-        db.query(sql, answers, (err, result) => {
-            if (err) {
-                res.status(400).json(err);
-                return;
-            }
-            res.json({
-                message: 'success',
-            });
-        });
-    })
-        .then(() => startApp())
+    DB.findAllDepartments()
+        .then(([rows]) => {
+            let departments = rows;
+            const departmentChoices = departments.map(({ id, name }) => ({
+                name: name,
+                value: id
+            }))
+
+            prompt([
+                {
+                    type: 'input',
+                    name: 'title',
+                    message: "What is the title/name of the role?",
+                },
+                {
+                    type: 'input',
+                    name: 'salary',
+                    message: "What is the salary of the role?",
+                },
+                {
+                    type: 'list',
+                    name: 'department_id',
+                    message: "Which department does this role belong to?",
+                    choices: departmentChoices,
+                },
+            ]).then((role) => {
+                DB.createRole(role)
+                    .then(() => console.log(`added ${role.title} to the database`))
+                    .then(() => startApp())
+            })
+
+        })
 };
 
 function viewDepartments() {
